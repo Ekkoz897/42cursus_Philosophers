@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 13:40:10 by apereira          #+#    #+#             */
-/*   Updated: 2023/08/29 10:09:18 by apereira         ###   ########.fr       */
+/*   Updated: 2023/08/29 10:25:41 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <unistd.h>
+# include <sys/time.h>
+# include <pthread.h>
 
 typedef struct s_vars
 {
@@ -27,6 +30,15 @@ typedef struct s_vars
 	int		fd1;
 	int		fd2;
 	char	*temp;
+	int		t_to_die;
+	int		t_to_eat;
+	int		nbr_of_meals;
 }t_philo;
 
+// main.c
+t_philo	*init_philo(char **av, t_philo *philo);
+int		main(int nbr_of_philo, char **argv);
+
+//utils.c
+long	ft_atoi(const char *str);
 #endif

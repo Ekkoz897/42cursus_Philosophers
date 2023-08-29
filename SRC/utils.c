@@ -1,38 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/29 10:02:26 by apereira          #+#    #+#             */
-/*   Updated: 2023/08/29 10:27:52 by apereira         ###   ########.fr       */
+/*   Created: 2023/08/29 10:21:20 by apereira          #+#    #+#             */
+/*   Updated: 2023/08/29 10:21:26 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-t_philo	*init_philo(char **av, t_philo *philo)
+long	ft_atoi(const char *str)
 {
-	philo = malloc(sizeof(t_philo));
-	if (!philo)
-		return (NULL);
-	philo->t_to_die = ft_atoi(av[2]);
-	philo->t_to_eat = ft_atoi(av[3]);
-	philo->nbr_of_meals = ft_atoi(av[4]);
-	return (philo);
-}
+	long long	res;
+	int			i;
+	int			posneg;
 
-int	main(int ac, char **av)
-{
-	t_philo	*philo;
-
-	(void) ac;
-	philo = NULL;
-	init_philo(av, philo);
-	if (!philo)
-		return (1);
-	if (start_simulation(philo))
-		return (1);
-	return (0);
+	res = 0;
+	i = 0;
+	posneg = 1;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			posneg = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		res = res * 10 + (str[i] - '0');
+		i++;
+	}
+	return (res * posneg);
 }
