@@ -4,9 +4,9 @@ CC = cc
 
 RM = rm -rf
 
-CFLAGS = -Wall -Wextra -Werror -g fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g fsanitize=address
 
-SRC = main.c 
+SRC = main.c utils.c
 
 OBJ = $(SRC:.c=.o)
 
