@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 13:40:10 by apereira          #+#    #+#             */
-/*   Updated: 2023/09/16 13:16:27 by apereira         ###   ########.fr       */
+/*   Updated: 2023/09/16 13:40:50 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,19 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+# define DEAD 0
+# define EAT 1
+# define SLEEP 2
+# define THINK 3
+
+typedef struct s_filo
+{
+	int	id;
+	int	state;
+	int	meals_eaten;
+	int	last_meal;
+}t_filo;
+
 typedef struct s_vars
 {
 	int		fd[2];
@@ -33,6 +46,7 @@ typedef struct s_vars
 	int		t_to_die;
 	int		t_to_eat;
 	int		nbr_of_meals;
+	t_filo	*filo;
 }t_philo;
 
 // main.c
