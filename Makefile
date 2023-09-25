@@ -16,7 +16,7 @@ $(NAME): $(addprefix SRC/,$(OBJ))
 	@$(CC) $(addprefix SRC/,$(OBJ)) -o $(NAME)
 
 run: $(NAME)
-	@./philo
+	@./philo 5 800 200 200
 
 valgrind: $(NAME)
 	@make re && valgrind --leak-check=full --show-leak-kinds=all ./philo
