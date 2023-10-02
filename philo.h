@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 13:40:10 by apereira          #+#    #+#             */
-/*   Updated: 2023/09/25 13:58:12 by apereira         ###   ########.fr       */
+/*   Updated: 2023/10/02 13:35:16 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@
 
 typedef struct s_filo
 {
+	int		n_filos;
+	int		t_to_die;
+	int		t_to_eat;
+	int		t_to_sleep;
 	int				id;
 	int				state;
 	int				meals_eaten;
@@ -39,14 +43,6 @@ typedef struct s_filo
 
 typedef struct s_vars
 {
-	int		fd[2];
-	int		pipe_fd[2];
-	int		pid1;
-	char	*temp;
-	int		n_filos;
-	int		t_to_die;
-	int		t_to_eat;
-	int		t_to_sleep;
 	int		min_meals;
 	t_filo	*filo;
 }t_vars;
@@ -56,5 +52,7 @@ t_vars	*init_philo(char **av, t_vars *philo);
 int		main(int nbr_of_philo, char **argv);
 
 //utils.c
+long	get_current_time(void);
 long	ft_atoi(const char *str);
+void	ft_pick_right_fork(t_filo *filo,void *data);
 #endif

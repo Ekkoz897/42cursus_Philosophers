@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 10:21:20 by apereira          #+#    #+#             */
-/*   Updated: 2023/08/29 10:21:26 by apereira         ###   ########.fr       */
+/*   Updated: 2023/10/02 13:34:19 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,21 @@ long	ft_atoi(const char *str)
 		i++;
 	}
 	return (res * posneg);
+}
+
+// struct timevall guarda o tempo em segundos e microsegundos
+long	get_current_time(void)
+{
+	struct timeval	current_time;
+
+	gettimeofday(&current_time, NULL);
+	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
+}
+
+void	ft_pick_right_fork(t_filo *filo,void *data)
+{
+	pthread_mutex_lock(((t_filo *)filo)->right_fork);
+	printf("Philosopher %d grabbed the right fork\n", ((t_filo *)data)->id);
+    pthread_mutex_lock(((t_filo *)filo)->left_fork);
+    printf("Philosopher %d grabbed the left fork\n", ((t_filo *)data)->id);
 }
