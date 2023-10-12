@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 10:02:26 by apereira          #+#    #+#             */
-/*   Updated: 2023/10/02 13:43:44 by apereira         ###   ########.fr       */
+/*   Updated: 2023/10/12 12:39:20 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_vars	*init_vars(char **av, t_vars *vars)
 
 // Implementation of the philosopher's behavior
 // usleep funciona em microsegundos, logo, 1000 = 1ms
-// para evitar deadlock, fazemos com q o ultimo pegue no garfo da direita primeiro
+// para evitar deadlock, fazemos com q o ultimo pegue no garfo da direita
 void	*ft_filo(void *data)
 {
 	t_filo	*filo;
