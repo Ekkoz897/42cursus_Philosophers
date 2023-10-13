@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 10:21:20 by apereira          #+#    #+#             */
-/*   Updated: 2023/10/02 13:34:19 by apereira         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:48:36 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ long	get_current_time(void)
 	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
 
-void	ft_pick_right_fork(t_filo *filo,void *data)
+void	ft_pick_right_fork(t_philo *filo,void *data)
 {
-	pthread_mutex_lock(((t_filo *)filo)->right_fork);
-	printf("Philosopher %d grabbed the right fork\n", ((t_filo *)data)->id);
-    pthread_mutex_lock(((t_filo *)filo)->left_fork);
-    printf("Philosopher %d grabbed the left fork\n", ((t_filo *)data)->id);
+	pthread_mutex_lock(((t_philo *)filo)->right_fork);
+	printf("P%d grabbed the right fork\n", ((t_philo *)data)->id);
+    pthread_mutex_lock(((t_philo *)filo)->left_fork);
+    printf("P%d grabbed the left fork\n", ((t_philo *)data)->id);
 }
