@@ -13,13 +13,13 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(addprefix SRC/,$(OBJ))
-	@$(CC) -g $(addprefix SRC/,$(OBJ)) -pthread -o $(NAME)
+	@$(CC) $(addprefix SRC/,$(OBJ)) -pthread -o $(NAME)
 
 run: $(NAME)
-	@./philo 10 80 80 80 2
+	@./philo 5 8000 200 200 7
 
 valgrind: $(NAME)
-	@make re && valgrind --leak-check=full --show-leak-kinds=all ./philo 10 80 80 80 2
+	@make re && valgrind --leak-check=full --show-leak-kinds=all ./philo 5 8000 200 200 7
 
 git: fclean
 	@git add .
