@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 10:21:20 by apereira          #+#    #+#             */
-/*   Updated: 2023/10/16 15:37:13 by apereira         ###   ########.fr       */
+/*   Updated: 2023/10/17 13:28:14 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,24 @@ long	get_current_time(void)
 	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
 
-void	ft_pick_right_fork(t_philo *filo,void *data)
+void	ft_pick_right_fork(t_philo *filo)
 {
-	pthread_mutex_lock(((t_philo *)filo)->right_fork);
-	printf("P%d grabbed the right fork\n", ((t_philo *)data)->id);
-    pthread_mutex_lock(((t_philo *)filo)->left_fork);
-    printf("P%d grabbed the left fork\n", ((t_philo *)data)->id);
+	if (pthread_mutex_lock(filo->right_fork) != 0)
+	{
+		pthread_mutex_unlock(&filo->config->permission_to_pick_forks);
+        usleep(filo->id * 1000);
+        return;
+    }
+	print_status(filo, FORK);
+	if (pthread_mutex_lock(filo->left_fork) != 0)
+	{
+		pthread_mutex_unlock(filo->right_fork);
+        print_status(filo, DFORK);
+		pthread_mutex_unlock(&filo->config->permission_to_pick_forks);
+        usleep(filo->id * 1000);
+        return;
+	}
+    print_status(filo, FORK);
 }
 
 t_config	*init_vars(int ac, char **av)
@@ -63,6 +75,7 @@ t_config	*init_vars(int ac, char **av)
 	config->t_to_die = ft_atoi(av[2]);
 	config->t_to_eat = ft_atoi(av[3]);
 	config->t_to_sleep = ft_atoi(av[4]);
+	config->start_time = get_current_time();
 	if (ac == 6)
 		config->max_meals = ft_atoi(av[5]);
 	else
@@ -132,4 +145,31 @@ void mutex_destroyer(pthread_mutex_t *forks, t_philo *filo, t_config *config)
 		i++;
 	}
 	pthread_mutex_destroy(&filo->config->permission_to_pick_forks);
+}
+
+void print_status(t_philo *philo, int status)
+{
+    printf("%ld %d is %s\n", get_current_time() - philo->config->start_time, philo->id + 1, get_state_string(status));
+}
+
+const char *get_state_string(int state)
+{
+    if (state == THINK)
+        return "thinking";
+    else if (state == EAT)
+        return "eating";
+    else if (state == SLEEP)
+        return "sleeping";
+    else if (state == DEAD)
+        return "dead";
+	else if (state == PERM)
+		return ("trying to lock permission_to_pick_forks");
+	else if (state == PERM2)
+		return ("locking permission_to_pick_forks");
+	else if (state == FORK)
+		return ("grabbing a fork");
+	else if (state == DFORK)
+		return ("dropping a fork");
+	else
+		return ("unknown");
 }

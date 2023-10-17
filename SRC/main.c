@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 10:02:26 by apereira          #+#    #+#             */
-/*   Updated: 2023/10/16 15:26:23 by apereira         ###   ########.fr       */
+/*   Updated: 2023/10/17 13:27:10 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_philo *init_philosophers(t_config *config, pthread_mutex_t *forks)
 // Implementation of the philosopher's behavior
 // usleep funciona em microsegundos, logo, 1000 = 1ms
 // para evitar deadlock, fazemos com q o ultimo pegue no garfo da direita
+// e todos devem pedir autorizacao para pegar nos garfos
 void	*ft_filo(void *data)
 {
 	t_philo	*filo;
@@ -45,38 +46,50 @@ void	*ft_filo(void *data)
 
 	filo = (t_philo *)data;
 	n_loops = 0;
-	while (n_loops < 5)
+	while (n_loops < filo->config->max_meals)
 	{
-		printf("P%d is thinking\n", filo->id);
+		print_status(filo, THINK);
 	
-		printf("P%d trying to lock permission_to_pick_forks\n", filo->id);
+		print_status(filo, PERM);
 		pthread_mutex_lock(&filo->config->permission_to_pick_forks);
-		printf("P%d locked permission_to_pick_forks\n", filo->id);
-
+		print_status(filo, PERM2);
+		
 		if (filo->id == filo->config->n_filos - 1)
-			ft_pick_right_fork(filo, data);
+			ft_pick_right_fork(filo);
 		else
 		{
-			printf("P%d grabbed the left fork\n", filo->id);
-			pthread_mutex_lock(filo->left_fork);
+			if (pthread_mutex_lock(filo->left_fork) != 0)
+			{
+				pthread_mutex_unlock(&filo->config->permission_to_pick_forks);
+				usleep(filo->id * 1000);
+				return (NULL);
+			}
+    		print_status(filo, FORK);
 			
-			printf("P%d grabbed the right fork\n", filo->id);
-			pthread_mutex_lock(filo->right_fork);
+			if (pthread_mutex_lock(filo->right_fork) != 0)
+			{
+				pthread_mutex_unlock(filo->left_fork);
+				print_status(filo, DFORK);
+				pthread_mutex_unlock(&filo->config->permission_to_pick_forks);
+				usleep(filo->id * 1000);
+				return (NULL);
+			}
+			print_status(filo, FORK);
 		}
 
-		printf("P%d is eating\n", filo->id);
+		print_status(filo, EAT);
 		filo->last_meal = get_current_time();
 		usleep(filo->config->t_to_eat * 1000);
 		
-		printf("P%d dropped the left fork\n", filo->id);
 		pthread_mutex_unlock(filo->left_fork);
+		print_status(filo, DFORK);
 		
-		printf("P%d dropped the right fork\n", filo->id);
 		pthread_mutex_unlock(filo->right_fork);
+		print_status(filo, DFORK);
 		
 		pthread_mutex_unlock(&filo->config->permission_to_pick_forks);
 		
-		printf("P%d is sleeping\n", filo->id);
+		print_status(filo, SLEEP);
 		usleep(filo->config->t_to_sleep * 1000);
 		n_loops++;
 	}
@@ -96,6 +109,7 @@ void	ft_start_simulation(t_philo *filo, pthread_mutex_t *forks,
 		pthread_mutex_init(&forks[i], NULL);
 		i++;
 	}
+	pthread_mutex_init(&filo->config->permission_to_pick_forks, NULL);
 	i = 0;
 	while (i < filo->config->n_filos)
 	{
@@ -120,9 +134,6 @@ int	main(int ac, char **av)
 	filo = init_philosophers(config, forks);
 	if (!forks || !threads || !filo)
 		return (0);
-	printf("Initializing permission_to_pick_forks mutex\n");
-	pthread_mutex_init(&filo->config->permission_to_pick_forks, NULL);
-	printf("Initialized permission_to_pick_forks mutex\n");
 	ft_start_simulation(filo, forks, threads);
 	mutex_destroyer(forks, filo, config);
 	ft_clear_mem(filo, forks, config, threads);

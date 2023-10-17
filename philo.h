@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 13:40:10 by apereira          #+#    #+#             */
-/*   Updated: 2023/10/16 14:47:53 by apereira         ###   ########.fr       */
+/*   Updated: 2023/10/17 13:26:01 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,19 @@
 # define EAT 1
 # define SLEEP 2
 # define THINK 3
+# define PERM 4
+# define PERM2 5
+# define FORK 6
+# define DFORK 7
 
 typedef struct s_config
 {
-	int	n_filos;
-	int	t_to_die;
-	int	t_to_eat;
-	int	t_to_sleep;
-	int	max_meals;
+	int		n_filos;
+	int		t_to_die;
+	int		t_to_eat;
+	int		t_to_sleep;
+	int		max_meals;
+	long	start_time;
 	pthread_mutex_t permission_to_pick_forks;
 }	t_config;
 
@@ -55,10 +60,12 @@ int			main(int nbr_of_philo, char **argv);
 //utils.c
 long		get_current_time(void);
 long		ft_atoi(const char *str);
-void		ft_pick_right_fork(t_philo *filo, void *data);
+void		ft_pick_right_fork(t_philo *filo);
 t_config	*init_vars(int ac, char **av);
 void 		ft_clear_mem(t_philo *filo, pthread_mutex_t *forks, t_config *config,
 				pthread_t *threads);
 int			args_ok(int ac, char **av);
 void 		mutex_destroyer(pthread_mutex_t *forks, t_philo *filo, t_config *config);
+void 		print_status(t_philo *philo, int status);
+const char *get_state_string(int state);
 #endif
