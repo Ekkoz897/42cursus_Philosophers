@@ -6,7 +6,7 @@ RM = rm -rf
 
 CFLAGS = -Wall -Wextra -Werror #-g fsanitize=address
 
-SRC = main.c utils.c
+SRC = main.c init.c utils.c utils2.c utils3.c police.c routines.c
 
 OBJ = $(SRC:.c=.o)
 
