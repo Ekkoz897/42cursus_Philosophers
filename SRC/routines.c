@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 13:31:13 by apereira          #+#    #+#             */
-/*   Updated: 2023/11/11 13:48:52 by apereira         ###   ########.fr       */
+/*   Updated: 2023/11/14 17:44:37 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	check_condition(t_filo *filo)
 	pthread_mutex_unlock(&filo->config->life);
 	return (0);
 }
-
 
 int	eating(t_filo *filo)
 {

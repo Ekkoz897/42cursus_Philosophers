@@ -6,12 +6,11 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 11:59:39 by apereira          #+#    #+#             */
-/*   Updated: 2023/11/11 13:53:21 by apereira         ###   ########.fr       */
+/*   Updated: 2023/11/14 17:44:52 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
 
 t_config	*init(int ac, char **av)
 {
